@@ -1,5 +1,6 @@
 package com.wishlist.wishlist.infrastructure.database.schema;
 
+import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,11 +13,13 @@ public class WishlistSchema {
     @Id
     private String userId;
 
-    private Set<String> productIds;
+    private Set<ProductSchema> products;
 
-    public WishlistSchema(String userId, Set<String> productIds) {
+    public WishlistSchema(String userId, Set<Product> productIds) {
         this.userId = userId;
-        this.productIds = productIds;
+        this.products = productIds.stream()
+                .map(product -> new ProductSchema(product.getId()))
+                .collect(java.util.stream.Collectors.toSet());
     }
 
     public String getUserId() {
@@ -27,15 +30,18 @@ public class WishlistSchema {
         this.userId = userId;
     }
 
-    public Set<String> getProductIds() {
-        return productIds;
+    public Set<ProductSchema> getProducts() {
+        return products;
     }
 
-    public void setProductIds(Set<String> productIds) {
-        this.productIds = productIds;
+    public void setProductIds(Set<ProductSchema> products) {
+        this.products = products;
     }
 
     public Wishlist toDomain() {
-        return new Wishlist(this.userId, this.productIds);
+        return new Wishlist(this.userId,
+                this.products.stream()
+                        .map(ProductSchema::toDomain)
+                        .collect(java.util.stream.Collectors.toSet()));
     }
 }

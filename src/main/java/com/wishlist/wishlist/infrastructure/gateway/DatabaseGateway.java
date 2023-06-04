@@ -19,7 +19,7 @@ public class DatabaseGateway implements Gateway {
 
     @Override
     public Wishlist save(Wishlist wishlist) {
-        return wishlistMongoRepository.save(new WishlistSchema(wishlist.getUserId(), wishlist.getProductIds()))
+        return wishlistMongoRepository.save(new WishlistSchema(wishlist.getUserId(), wishlist.getProducts()))
                 .toDomain();
     }
 
@@ -27,6 +27,11 @@ public class DatabaseGateway implements Gateway {
     public Optional<Wishlist> findUserWishlist(String userId) {
         return wishlistMongoRepository.findByUserId(userId)
                 .map(WishlistSchema::toDomain);
+    }
+
+    @Override
+    public Wishlist findByUserId(String userId) {
+        return null;
     }
 
     @Override

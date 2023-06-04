@@ -2,6 +2,7 @@ package com.wishlist.wishlist.usecase;
 
 import com.wishlist.wishlist.domain.exception.CapacityExceededException;
 import com.wishlist.wishlist.domain.model.Gateway;
+import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,11 @@ public class AddProductUseCase {
             throw new CapacityExceededException("A quantidade de produtos não pode exceder a 20 unidades.");
         }
 
-        if (wishlist.containsProduct(input.productId)) {
+        if (wishlist.containsProduct(input.productId())) {
             return wishlist;
         }
 
-        wishlist.addProduct(input.productId);
+        wishlist.addProduct(new Product(input.productId()));
         return gateway.save(wishlist);
     }
 

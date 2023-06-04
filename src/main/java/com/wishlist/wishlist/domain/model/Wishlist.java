@@ -6,20 +6,20 @@ import java.util.Set;
 public class Wishlist {
 
     private String userId;
-    private Set<String> productIds;
+    private Set<Product> products;
 
     public Wishlist(String userId) {
         this.userId = userId;
-        this.productIds = new HashSet<>(20);
+        this.products = new HashSet<>(20);
     }
 
-    public Wishlist(String userId, Set<String> productIds) {
+    public Wishlist(String userId, Set<Product> products) {
         this.userId = userId;
-        this.productIds = productIds;
+        this.products = products;
     }
 
-    public boolean addProduct(String productId) {
-        return this.productIds.add(productId);
+    public boolean addProduct(Product product) {
+        return this.products.add(product);
     }
 
     public String getUserId() {
@@ -30,15 +30,16 @@ public class Wishlist {
         this.userId = userId;
     }
 
-    public Set<String> getProductIds() {
-        return productIds;
+    public Set<Product> getProducts() {
+        return products;
     }
 
     public boolean isFull() {
-        return this.productIds.size() > 19;
+        return this.products.size() > 19;
     }
 
     public boolean containsProduct(String productId) {
-        return this.productIds.contains(productId);
+        return products.stream()
+                .anyMatch(product -> product.getId().equals(productId));
     }
 }

@@ -21,7 +21,7 @@ public class WishlistController {
     @PostMapping("/users/{userId}/wishlist")
     public ResponseEntity<Void> addProduct(@PathVariable String userId,
                                            @RequestBody AddProductRequest request) throws CapacityExceededException {
-        addProductUseCase.execute(new AddProductUseCase.Input(userId, request.productId));
+        addProductUseCase.execute(new AddProductUseCase.Input(userId, request.productId()));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -32,7 +32,15 @@ public class WishlistController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("users/{userId}/wishlist")
+    public ResponseEntity<Void> findProduct(@PathVariable String userId, @RequestParam String productId) {
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
     public record AddProductRequest(String productId) {
+    }
+
+    public record ProductResponse(String productId) {
     }
 }

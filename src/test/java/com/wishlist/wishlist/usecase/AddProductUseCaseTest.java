@@ -2,6 +2,7 @@ package com.wishlist.wishlist.usecase;
 
 import com.wishlist.wishlist.domain.exception.CapacityExceededException;
 import com.wishlist.wishlist.domain.model.Gateway;
+import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
 import com.wishlist.wishlist.usecase.AddProductUseCase.Input;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ class AddProductUseCaseTest {
     @DisplayName("Should throw exception when Wishlist is full")
     void shouldThrowException_whenWishlistIsFull() throws CapacityExceededException {
         // given
-        Wishlist existingWishlist = new Wishlist("userId", generateProductIds(20));
+        Wishlist existingWishlist = new Wishlist("userId", generateProducts(20));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
         Input input = new Input("userId", "product21");
 
@@ -45,7 +46,7 @@ class AddProductUseCaseTest {
     @DisplayName("Should add product when Wishlist is not full")
     void shouldAdd_whenWishlistIsNotFull() throws CapacityExceededException {
         // given
-        Wishlist existingWishlist = new Wishlist("userId", generateProductIds(10));
+        Wishlist existingWishlist = new Wishlist("userId", generateProducts(10));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
         Input input = new Input("userId", "product11");
 
@@ -60,8 +61,8 @@ class AddProductUseCaseTest {
     @DisplayName("Should not add product when product is duplicate")
     void shouldNotAdd_whenProductIsDuplicate() throws CapacityExceededException {
         // given
-        Wishlist existingWishlist = new Wishlist("userId", generateProductIds(10));
-        existingWishlist.addProduct("duplicateProductId");
+        Wishlist existingWishlist = new Wishlist("userId", generateProducts(10));
+        existingWishlist.addProduct(new Product("duplicateProductId"));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
         Input input = new Input("userId", "duplicateProductId");
 
@@ -86,11 +87,11 @@ class AddProductUseCaseTest {
         verify(gateway, times(1)).save(any(Wishlist.class));
     }
 
-    private Set<String> generateProductIds(int count) {
-        Set<String> productIds = new HashSet<>();
+    private Set<Product> generateProducts(int count) {
+        Set<Product> products = new HashSet<>();
         for (int i = 1; i <= count; i++) {
-            productIds.add("product" + i);
+            products.add(new Product("product" + i));
         }
-        return productIds;
+        return products;
     }
 }

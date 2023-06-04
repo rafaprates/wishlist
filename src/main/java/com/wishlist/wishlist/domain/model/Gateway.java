@@ -9,4 +9,6 @@ public interface Gateway {
     void removeUserProduct(String userId, String productId);
 
     Optional<Wishlist> findUserWishlist(String userId);
+
+    Wishlist findByUserId(String userId);
 }
