@@ -40,6 +40,6 @@ public class Wishlist {
 
     public boolean containsProduct(String productId) {
         return products.stream()
-                .anyMatch(product -> product.getId().equals(productId));
+                .anyMatch(product -> product.getProductId().equals(productId));
     }
 }

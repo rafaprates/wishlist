@@ -11,4 +11,6 @@ public interface Gateway {
     Optional<Wishlist> findUserWishlist(String userId);
 
     Wishlist findByUserId(String userId);
+
+    Wishlist findByUserIdAndProductId(String userId, String productId);
 }

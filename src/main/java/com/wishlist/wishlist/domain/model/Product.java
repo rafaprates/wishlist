@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public class Product {
 
-    private String id;
+    private String productId;
 
-    public Product(String id) {
-        this.id = id;
+    public Product(String productId) {
+        this.productId = productId;
     }
 
-    public String getId() {
-        return id;
+    public String getProductId() {
+        return productId;
     }
 
     @Override
@@ -19,11 +19,11 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id);
+        return Objects.equals(productId, product.productId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(productId);
     }
 }
