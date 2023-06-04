@@ -4,12 +4,8 @@ import com.wishlist.wishlist.domain.exception.CapacityExceededException;
 import com.wishlist.wishlist.usecase.AddProductUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/wishlist")
 @RestController
 public class WishlistController {
 
@@ -19,12 +15,13 @@ public class WishlistController {
         this.addProductUseCase = addProductUseCase;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addProduct(@RequestBody AddProductRequest request) throws CapacityExceededException {
-        addProductUseCase.execute(new AddProductUseCase.Input(request.userId, request.productId));
+    @PostMapping("/users/{userId}/wishlist")
+    public ResponseEntity<Void> addProduct(@PathVariable String userId,
+                                           @RequestBody AddProductRequest request) throws CapacityExceededException {
+        addProductUseCase.execute(new AddProductUseCase.Input(userId, request.productId));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    public record AddProductRequest(String userId, String productId) {
+    
+    public record AddProductRequest(String productId) {
     }
 }
