@@ -1,6 +1,5 @@
 package com.wishlist.wishlist.usecase;
 
-import com.wishlist.wishlist.domain.exception.CapacityExceededException;
 import com.wishlist.wishlist.domain.exception.UserNotFoundException;
 import com.wishlist.wishlist.domain.model.Gateway;
 import com.wishlist.wishlist.domain.model.Product;
@@ -17,27 +16,27 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Search Product Use Case")
-class SearchProductUseCaseTest {
+class SearchProductByUserUseCaseTest {
 
     @Mock
     private Gateway gateway;
 
     @InjectMocks
-    private SearchProductUseCase searchProductUseCase;
+    private SearchProductByUserUseCase searchProductByUserUseCase;
 
     @Test
     @DisplayName("Should throw UserNotFoundException when provided user has no wishlist")
     void shouldThrowException_whenUserIdIsNotValid() throws UserNotFoundException {
         // given
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.empty());
-        SearchProductUseCase.Input input = new SearchProductUseCase.Input("userId", "productId");
+        SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "productId");
 
         // when, expect
-        assertThrows(UserNotFoundException.class, () -> searchProductUseCase.execute(input));
+        assertThrows(UserNotFoundException.class, () -> searchProductByUserUseCase.execute(input));
     }
 
     @Test
@@ -46,10 +45,10 @@ class SearchProductUseCaseTest {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
-        SearchProductUseCase.Input input = new SearchProductUseCase.Input("userId", "product2");
+        SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "product2");
 
         // when
-        SearchProductUseCase.Output output = searchProductUseCase.execute(input);
+        SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(input);
 
         // expect
         assertTrue(output.products().isEmpty());
@@ -61,10 +60,10 @@ class SearchProductUseCaseTest {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
-        SearchProductUseCase.Input input = new SearchProductUseCase.Input("userId", "product1");
+        SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "product1");
 
         // when
-        SearchProductUseCase.Output output = searchProductUseCase.execute(input);
+        SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(input);
 
         // expect
         assertEquals("product1", output.products().stream().findFirst().get().getProductId());
@@ -76,10 +75,10 @@ class SearchProductUseCaseTest {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
-        SearchProductUseCase.Input input = new SearchProductUseCase.Input("userId", "product1");
+        SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "product1");
 
         // when
-        SearchProductUseCase.Output output = searchProductUseCase.execute(input);
+        SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(input);
 
         // expect
         assertEquals(1, output.products().size());

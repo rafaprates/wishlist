@@ -7,6 +7,4 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.Optional;
 
 public interface WishlistMongoRepository extends MongoRepository<WishlistSchema, String> {
-
-    void deleteByUserIdAndProductIds(String userId, String productId);
 }

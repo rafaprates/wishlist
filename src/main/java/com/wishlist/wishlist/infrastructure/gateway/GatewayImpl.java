@@ -5,6 +5,10 @@ import com.wishlist.wishlist.domain.model.Wishlist;
 import com.wishlist.wishlist.infrastructure.database.repository.WishlistMongoRepository;
 import com.wishlist.wishlist.infrastructure.database.schema.ProductSchema;
 import com.wishlist.wishlist.infrastructure.database.schema.WishlistSchema;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,9 +19,11 @@ import java.util.stream.Collectors;
 public class GatewayImpl implements Gateway {
 
     private final WishlistMongoRepository wishlistMongoRepository;
+    private final MongoTemplate mongoTemplate;
 
-    public GatewayImpl(WishlistMongoRepository wishlistMongoRepository) {
+    public GatewayImpl(WishlistMongoRepository wishlistMongoRepository, MongoTemplate mongoTemplate) {
         this.wishlistMongoRepository = wishlistMongoRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -32,23 +38,19 @@ public class GatewayImpl implements Gateway {
 
     @Override
     public Optional<Wishlist> findUserWishlist(String userId) {
-        Optional<WishlistSchema> byId = wishlistMongoRepository.findById(userId);
-        return byId
+        return wishlistMongoRepository.findById(userId)
                 .map(WishlistSchema::toDomain);
     }
 
     @Override
-    public Wishlist findByUserId(String userId) {
-        return null;
-    }
+    public void removeProduct(String userId, String productId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        query.addCriteria(Criteria.where("products.productId").is(productId));
 
-    @Override
-    public void removeUserProduct(String userId, String productId) {
-        wishlistMongoRepository.deleteByUserIdAndProductIds(userId, productId);
-    }
+        Update update = new Update();
+        update.pull("products", new ProductSchema(productId));
 
-    @Override
-    public Wishlist findByUserIdAndProductId(String userId, String productId) {
-        return null;
+        mongoTemplate.updateMulti(query, update, WishlistSchema.class);
     }
 }

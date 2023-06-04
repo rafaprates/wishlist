@@ -13,7 +13,7 @@ public class RemoveProductUseCase {
     }
 
     public void execute(Input input) {
-        gateway.removeUserProduct(input.userId(), input.productId());
+        gateway.removeProduct(input.userId(), input.productId());
     }
 
     public record Input(String userId, String productId) {

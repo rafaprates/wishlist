@@ -31,7 +31,7 @@ class RemoveProductUseCaseTest {
         removeProductUseCase.execute(input);
 
         // expect
-        verify(gateway, times(1)).removeUserProduct("userId", "productId");
+        verify(gateway, times(1)).removeProduct("userId", "productId");
     }
 
 }

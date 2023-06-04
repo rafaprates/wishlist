@@ -10,11 +10,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class SearchProductUseCase {
+public class SearchProductByUserUseCase {
 
     private final Gateway gateway;
 
-    public SearchProductUseCase(Gateway gateway) {
+    public SearchProductByUserUseCase(Gateway gateway) {
         this.gateway = gateway;
     }
 

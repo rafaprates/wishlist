@@ -6,11 +6,7 @@ public interface Gateway {
 
     Wishlist save(Wishlist wishlist);
 
-    void removeUserProduct(String userId, String productId);
-
     Optional<Wishlist> findUserWishlist(String userId);
 
-    Wishlist findByUserId(String userId);
-
-    Wishlist findByUserIdAndProductId(String userId, String productId);
+    void removeProduct(String userId, String productId);
 }
