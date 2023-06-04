@@ -28,4 +28,9 @@ public class DatabaseGateway implements Gateway {
         return wishlistMongoRepository.findByUserId(userId)
                 .map(WishlistSchema::toDomain);
     }
+
+    @Override
+    public void removeUserProduct(String userId, String productId) {
+        wishlistMongoRepository.deleteByUserIdAndProductIds(userId, productId);
+    }
 }
