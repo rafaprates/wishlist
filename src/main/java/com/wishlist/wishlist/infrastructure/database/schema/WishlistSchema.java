@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Document("wishlist")
 public class WishlistSchema {
@@ -15,11 +16,9 @@ public class WishlistSchema {
 
     private Set<ProductSchema> products;
 
-    public WishlistSchema(String userId, Set<Product> productIds) {
+    public WishlistSchema(String userId, Set<ProductSchema> products) {
         this.userId = userId;
-        this.products = productIds.stream()
-                .map(product -> new ProductSchema(product.getId()))
-                .collect(java.util.stream.Collectors.toSet());
+        this.products = products;
     }
 
     public String getUserId() {
@@ -42,6 +41,6 @@ public class WishlistSchema {
         return new Wishlist(this.userId,
                 this.products.stream()
                         .map(ProductSchema::toDomain)
-                        .collect(java.util.stream.Collectors.toSet()));
+                        .collect(Collectors.toSet()));
     }
 }

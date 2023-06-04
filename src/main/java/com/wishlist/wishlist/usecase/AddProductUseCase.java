@@ -16,8 +16,8 @@ public class AddProductUseCase {
     }
 
     public Wishlist execute(Input input) throws CapacityExceededException {
-        Wishlist wishlist = gateway.findUserWishlist(input.userId)
-                .orElseGet(() -> createNewWishlist(input.userId));
+        Wishlist wishlist = gateway.findUserWishlist(input.userId())
+                .orElseGet(() -> createNewWishlist(input.userId()));
 
         if (wishlist.isFull()) {
             throw new CapacityExceededException("A quantidade de produtos não pode exceder a 20 unidades.");
