@@ -41,8 +41,8 @@ public class WishlistController {
     }
 
     @GetMapping("/users/{userId}/wishlist")
-    public ResponseEntity<WishlistResponse> findAllByUser(@PathVariable String userId,
-                                                          @RequestParam(required = false) Optional<String> productId) throws UserNotFoundException {
+    public ResponseEntity<WishlistResponse> findByUser(@PathVariable String userId,
+                                                       @RequestParam(required = false) Optional<String> productId) throws UserNotFoundException {
 
         if (productId.isPresent()) {
             SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(new SearchProductByUserUseCase.Input(userId, productId.get()));
