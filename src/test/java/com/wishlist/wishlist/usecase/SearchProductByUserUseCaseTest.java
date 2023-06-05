@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Search Product Use Case")
+@DisplayName("Use case: Search Product By User")
 class SearchProductByUserUseCaseTest {
 
     @Mock
@@ -45,7 +45,7 @@ class SearchProductByUserUseCaseTest {
 
     @Test
     @DisplayName("Should return an empty list when product is not found")
-    void shouldReturnEmptyList_whenProductIsNotFound() throws UserNotFoundException {
+    void shouldReturnEmptyList_whenProductIsNotFound() {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
@@ -60,7 +60,7 @@ class SearchProductByUserUseCaseTest {
 
     @Test
     @DisplayName("Should find product when product is present")
-    void shouldFindProduct_whenProductIsPresent() throws UserNotFoundException {
+    void shouldFindProduct_whenProductIsPresent() {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
@@ -75,7 +75,7 @@ class SearchProductByUserUseCaseTest {
 
     @Test
     @DisplayName("Should return a list of size one when product is present")
-    void shouldReturnSingleItemOnList_whenProductIsPresent() throws UserNotFoundException {
+    void shouldReturnSingleItemOnList_whenProductIsPresent() {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));

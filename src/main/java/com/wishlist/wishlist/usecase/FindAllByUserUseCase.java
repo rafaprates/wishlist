@@ -20,10 +20,11 @@ public class FindAllByUserUseCase {
     public ProductOutput execute(Input input) {
         Optional<Wishlist> wishlist = gateway.findUserWishlist(input.userId());
 
-        if (wishlist.isPresent()) {
-            return new ProductOutput(wishlist.get().getProducts());
+        if (wishlist.isEmpty()) {
+            return new ProductOutput(Set.of());
         }
-        return new ProductOutput(Set.of());
+
+        return new ProductOutput(wishlist.get().getProducts());
     }
 
     public record Input(String userId) {

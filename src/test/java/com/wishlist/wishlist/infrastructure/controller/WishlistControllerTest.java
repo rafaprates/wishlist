@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = WishlistController.class)
-@DisplayName("Wishlist Controller")
+@DisplayName("Controller: Wishlist")
 class WishlistControllerTest {
 
     @Autowired

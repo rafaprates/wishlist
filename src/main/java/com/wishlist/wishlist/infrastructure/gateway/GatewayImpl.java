@@ -6,9 +6,6 @@ import com.wishlist.wishlist.infrastructure.database.repository.WishlistMongoRep
 import com.wishlist.wishlist.infrastructure.database.schema.ProductSchema;
 import com.wishlist.wishlist.infrastructure.database.schema.WishlistSchema;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -40,17 +37,5 @@ public class GatewayImpl implements Gateway {
     public Optional<Wishlist> findUserWishlist(String userId) {
         return wishlistMongoRepository.findById(userId)
                 .map(WishlistSchema::toDomain);
-    }
-
-    @Override
-    public void removeProduct(String userId, String productId) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(userId));
-        query.addCriteria(Criteria.where("products.productId").is(productId));
-
-        Update update = new Update();
-        update.pull("products", new ProductSchema(productId));
-
-        mongoTemplate.updateMulti(query, update, WishlistSchema.class);
     }
 }

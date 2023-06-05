@@ -22,13 +22,14 @@ public class SearchProductByUserUseCase {
     public ProductOutput execute(Input input) {
         Optional<Wishlist> wishlist = gateway.findUserWishlist(input.userId);
 
-        if (wishlist.isPresent()) {
-            Set<Product> matchingProducts = wishlist.get().getProducts().stream()
-                    .filter(product -> product.getProductId().equals(input.productId))
-                    .collect(Collectors.toSet());
-            return new ProductOutput(matchingProducts);
+        if (wishlist.isEmpty()) {
+            return new ProductOutput(Set.of());
         }
-        return new ProductOutput(Set.of());
+
+        Set<Product> matchingProducts = wishlist.get().getProducts().stream()
+                .filter(product -> product.getProductId().equals(input.productId))
+                .collect(Collectors.toSet());
+        return new ProductOutput(matchingProducts);
     }
 
     public record Input(String userId, String productId) {

@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Find All Products Use Case")
+@DisplayName("Use case: Find All By User")
 class FindAllByUserUseCaseTest {
 
     @Mock
