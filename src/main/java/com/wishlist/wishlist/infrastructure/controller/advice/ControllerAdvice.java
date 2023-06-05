@@ -1,4 +1,4 @@
-package com.wishlist.wishlist.infrastructure.advice;
+package com.wishlist.wishlist.infrastructure.controller.advice;
 
 import com.wishlist.wishlist.domain.exception.CapacityExceededException;
 import com.wishlist.wishlist.domain.exception.UserNotFoundException;
