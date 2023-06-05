@@ -1,6 +1,5 @@
 package com.wishlist.wishlist.usecase;
 
-import com.wishlist.wishlist.domain.exception.UserNotFoundException;
 import com.wishlist.wishlist.domain.model.Gateway;
 import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
@@ -15,7 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -30,14 +30,17 @@ class SearchProductByUserUseCaseTest {
     private SearchProductByUserUseCase searchProductByUserUseCase;
 
     @Test
-    @DisplayName("Should throw UserNotFoundException when provided user has no wishlist")
-    void shouldThrowException_whenUserIdIsNotValid() throws UserNotFoundException {
+    @DisplayName("Should return an empty list when a wishlist is not found for given user")
+    void shouldReturnEmpty_whenUserHasNoWishlist() {
         // given
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.empty());
         SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "productId");
 
-        // when, expect
-        assertThrows(UserNotFoundException.class, () -> searchProductByUserUseCase.execute(input));
+        // when
+        ProductOutput output = searchProductByUserUseCase.execute(input);
+
+        // expect
+        assertTrue(output.products().isEmpty());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.wishlist.wishlist.infrastructure.controller;
 
 import com.wishlist.wishlist.domain.exception.CapacityExceededException;
-import com.wishlist.wishlist.domain.exception.UserNotFoundException;
 import com.wishlist.wishlist.usecase.AddProductUseCase;
 import com.wishlist.wishlist.usecase.FindAllByUserUseCase;
 import com.wishlist.wishlist.usecase.RemoveProductUseCase;
@@ -43,7 +42,7 @@ public class WishlistController {
 
     @GetMapping("/wishlist/{userId}/products")
     public ResponseEntity<Set<ProductResponse>> findUserProducts(@PathVariable String userId,
-                                                                 @RequestParam(required = false) Optional<String> productId) throws UserNotFoundException {
+                                                                 @RequestParam(required = false) Optional<String> productId) {
         ProductOutput output;
         if (productId.isPresent()) {
             output = searchProductByUserUseCase.execute(new SearchProductByUserUseCase.Input(userId, productId.get()));

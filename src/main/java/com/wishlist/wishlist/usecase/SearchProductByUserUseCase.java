@@ -1,12 +1,12 @@
 package com.wishlist.wishlist.usecase;
 
-import com.wishlist.wishlist.domain.exception.UserNotFoundException;
 import com.wishlist.wishlist.domain.model.Gateway;
 import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
 import com.wishlist.wishlist.usecase.common.ProductOutput;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,20 +19,18 @@ public class SearchProductByUserUseCase {
         this.gateway = gateway;
     }
 
-    public ProductOutput execute(Input input) throws UserNotFoundException {
-        Wishlist wishlist = gateway.findUserWishlist(input.userId)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+    public ProductOutput execute(Input input) {
+        Optional<Wishlist> wishlist = gateway.findUserWishlist(input.userId);
 
-        Set<Product> matchingProducts = wishlist.getProducts().stream()
-                .filter(product -> product.getProductId().equals(input.productId))
-                .collect(Collectors.toSet());
-
-        return new ProductOutput(matchingProducts);
+        if (wishlist.isPresent()) {
+            Set<Product> matchingProducts = wishlist.get().getProducts().stream()
+                    .filter(product -> product.getProductId().equals(input.productId))
+                    .collect(Collectors.toSet());
+            return new ProductOutput(matchingProducts);
+        }
+        return new ProductOutput(Set.of());
     }
 
     public record Input(String userId, String productId) {
-    }
-
-    public record Output(Set<Product> products) {
     }
 }

@@ -1,7 +1,6 @@
 package com.wishlist.wishlist.infrastructure.controller.advice;
 
 import com.wishlist.wishlist.domain.exception.CapacityExceededException;
-import com.wishlist.wishlist.domain.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,11 +10,6 @@ public class ControllerAdvice {
 
     @ExceptionHandler(CapacityExceededException.class)
     public ResponseEntity<AdviceResponse> handleCapacityExceededException(CapacityExceededException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AdviceResponse(e.getMessage()));
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<AdviceResponse> handleUserNotFoundException(UserNotFoundException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AdviceResponse(e.getMessage()));
     }
 
