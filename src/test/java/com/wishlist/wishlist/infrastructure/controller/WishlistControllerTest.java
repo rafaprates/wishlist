@@ -7,6 +7,7 @@ import com.wishlist.wishlist.usecase.AddProductUseCase;
 import com.wishlist.wishlist.usecase.FindAllByUserUseCase;
 import com.wishlist.wishlist.usecase.RemoveProductUseCase;
 import com.wishlist.wishlist.usecase.SearchProductByUserUseCase;
+import com.wishlist.wishlist.usecase.common.ProductOutput;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +52,7 @@ class WishlistControllerTest {
     @DisplayName("Should return 201 when product is added")
     void shouldReturn201_whenProductIsAdded() throws Exception {
         WishlistController.AddProductRequest request = new WishlistController.AddProductRequest("productId");
-        mockMvc.perform(post("/users/{userId}/wishlist", "userId")
+        mockMvc.perform(post("/wishlist/{userId}/products", "userId")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -67,7 +68,7 @@ class WishlistControllerTest {
                 .execute(any());
 
         // act & assert
-        mockMvc.perform(post("/users/{userId}/wishlist", "userId")
+        mockMvc.perform(post("/wishlist/{userId}/products", "userId")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -78,11 +79,11 @@ class WishlistControllerTest {
     void shouldReturn200_whenReturnAllProducts() throws Exception {
         // given
         when(findAllByUserUseCase.execute(any())).thenReturn(
-                new FindAllByUserUseCase.Output("userId", Set.of(new Product("productId")))
+                new ProductOutput(Set.of(new Product("productId")))
         );
 
         // act & assert
-        mockMvc.perform(get("/users/{userId}/wishlist", "userId")
+        mockMvc.perform(get("/wishlist/{userId}/products", "userId")
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -92,11 +93,11 @@ class WishlistControllerTest {
     void shouldReturn200_whenReturnOneProduct() throws Exception {
         // given
         when(searchProductByUserUseCase.execute(any())).thenReturn(
-                new SearchProductByUserUseCase.Output("userId", Set.of(new Product("productId")))
+                new ProductOutput(Set.of(new Product("productId")))
         );
 
         // act & assert
-        mockMvc.perform(get("/users/{userId}/wishlist", "userId")
+        mockMvc.perform(get("/wishlist/{userId}/products", "userId")
                         .contentType("application/json")
                         .param("productId", "productId"))
                 .andExpect(status().isOk());
@@ -106,7 +107,7 @@ class WishlistControllerTest {
     @DisplayName("Should return 204 when product is removed")
     void shouldReturn204_whenProductIsRemoved() throws Exception {
         // act & assert
-        mockMvc.perform(delete("/users/{userId}/wishlist/{productId}", "userId", "productId")
+        mockMvc.perform(delete("/wishlist/{userId}/products/{productId}", "userId", "productId")
                         .contentType("application/json"))
                 .andExpect(status().isNoContent());
     }

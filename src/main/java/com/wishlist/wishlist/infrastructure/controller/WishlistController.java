@@ -6,6 +6,7 @@ import com.wishlist.wishlist.usecase.AddProductUseCase;
 import com.wishlist.wishlist.usecase.FindAllByUserUseCase;
 import com.wishlist.wishlist.usecase.RemoveProductUseCase;
 import com.wishlist.wishlist.usecase.SearchProductByUserUseCase;
+import com.wishlist.wishlist.usecase.common.ProductOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,37 +34,29 @@ public class WishlistController {
         this.findAllByUserUseCase = findAllByUserUseCase;
     }
 
-    @PostMapping("/users/{userId}/wishlist")
+    @PostMapping("wishlist/{userId}/products")
     public ResponseEntity<Void> addProduct(@PathVariable String userId,
                                            @RequestBody AddProductRequest request) throws CapacityExceededException {
         addProductUseCase.execute(new AddProductUseCase.Input(userId, request.productId()));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/users/{userId}/wishlist")
-    public ResponseEntity<WishlistResponse> findByUser(@PathVariable String userId,
-                                                       @RequestParam(required = false) Optional<String> productId) throws UserNotFoundException {
-
+    @GetMapping("/wishlist/{userId}/products")
+    public ResponseEntity<Set<ProductResponse>> findUserProducts(@PathVariable String userId,
+                                                                 @RequestParam(required = false) Optional<String> productId) throws UserNotFoundException {
+        ProductOutput output;
         if (productId.isPresent()) {
-            SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(new SearchProductByUserUseCase.Input(userId, productId.get()));
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new WishlistResponse(output.userId(), output.products().stream()
-                            .map(product -> new ProductResponse(product.getProductId()))
-                            .collect(Collectors.toSet())
-                    )
-            );
+            output = searchProductByUserUseCase.execute(new SearchProductByUserUseCase.Input(userId, productId.get()));
         } else {
-            FindAllByUserUseCase.Output output = findAllByUserUseCase.execute(new FindAllByUserUseCase.Input(userId));
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new WishlistResponse(output.userId(), output.products().stream()
-                            .map(product -> new ProductResponse(product.getProductId()))
-                            .collect(Collectors.toSet())
-                    )
-            );
+            output = findAllByUserUseCase.execute(new FindAllByUserUseCase.Input(userId));
         }
+        Set<ProductResponse> productsResponse = output.products().stream()
+                .map(product -> new ProductResponse(product.getProductId()))
+                .collect(Collectors.toSet());
+        return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
     }
 
-    @DeleteMapping("users/{userId}/wishlist/{productId}")
+    @DeleteMapping("/wishlist/{userId}/products/{productId}")
     public ResponseEntity<Void> removeProduct(@PathVariable String userId,
                                               @PathVariable String productId) {
         removeProductUseCase.execute(new RemoveProductUseCase.Input(userId, productId));
@@ -71,9 +64,6 @@ public class WishlistController {
     }
 
     public record AddProductRequest(String productId) {
-    }
-
-    public record WishlistResponse(String userId, Set<ProductResponse> products) {
     }
 
     public record ProductResponse(String productId) {

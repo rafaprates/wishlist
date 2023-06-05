@@ -3,6 +3,7 @@ package com.wishlist.wishlist.usecase;
 import com.wishlist.wishlist.domain.model.Gateway;
 import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
+import com.wishlist.wishlist.usecase.common.ProductOutput;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,14 +30,14 @@ class FindAllByUserUseCaseTest {
     private FindAllByUserUseCase findAllByUserUseCase;
 
     @Test
-    @DisplayName("Should return an empty list of products when user has no wishlist")
+    @DisplayName("Should return an empty list of products when user has no wishlist (never added a product)")
     void shouldReturnEmptyList_whenUserHasNoWishlist() {
         // given
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.empty());
         FindAllByUserUseCase.Input input = new FindAllByUserUseCase.Input("userId");
 
         // when
-        FindAllByUserUseCase.Output output = findAllByUserUseCase.execute(input);
+        ProductOutput output = findAllByUserUseCase.execute(input);
 
         // expect
         assertTrue(output.products().isEmpty());
@@ -44,14 +45,14 @@ class FindAllByUserUseCaseTest {
 
     @Test
     @DisplayName("Should return products when user has wishlist")
-    void shouldReturnWishlistWithProdcuts_whenUserAlreadyInsertedProdcuts() {
+    void shouldReturnWishlistWithProducts_whenUserAlreadyInsertedProducts() {
         // given
         Wishlist existingWishlist = new Wishlist("userId", Set.of(new Product("product1")));
         when(gateway.findUserWishlist(anyString())).thenReturn(Optional.of(existingWishlist));
         FindAllByUserUseCase.Input input = new FindAllByUserUseCase.Input("userId");
 
         // when
-        FindAllByUserUseCase.Output output = findAllByUserUseCase.execute(input);
+        ProductOutput output = findAllByUserUseCase.execute(input);
 
         // expect
         assertEquals(1, output.products().size());

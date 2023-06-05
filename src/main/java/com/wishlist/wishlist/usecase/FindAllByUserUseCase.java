@@ -1,10 +1,11 @@
 package com.wishlist.wishlist.usecase;
 
 import com.wishlist.wishlist.domain.model.Gateway;
-import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
+import com.wishlist.wishlist.usecase.common.ProductOutput;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -16,19 +17,15 @@ public class FindAllByUserUseCase {
         this.gateway = gateway;
     }
 
-    public Output execute(Input input) {
-        Wishlist wishlist = gateway.findUserWishlist(input.userId())
-                .orElseGet(() -> createEmptyWishlist(input.userId()));
-        return new Output(wishlist.getUserId(), wishlist.getProducts());
-    }
+    public ProductOutput execute(Input input) {
+        Optional<Wishlist> wishlist = gateway.findUserWishlist(input.userId());
 
-    private Wishlist createEmptyWishlist(String userId) {
-        return new Wishlist(userId);
+        if (wishlist.isPresent()) {
+            return new ProductOutput(wishlist.get().getProducts());
+        }
+        return new ProductOutput(Set.of());
     }
 
     public record Input(String userId) {
-    }
-
-    public record Output(String userId, Set<Product> products) {
     }
 }

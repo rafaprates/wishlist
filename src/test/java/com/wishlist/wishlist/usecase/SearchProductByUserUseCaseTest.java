@@ -4,6 +4,7 @@ import com.wishlist.wishlist.domain.exception.UserNotFoundException;
 import com.wishlist.wishlist.domain.model.Gateway;
 import com.wishlist.wishlist.domain.model.Product;
 import com.wishlist.wishlist.domain.model.Wishlist;
+import com.wishlist.wishlist.usecase.common.ProductOutput;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +49,7 @@ class SearchProductByUserUseCaseTest {
         SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "product2");
 
         // when
-        SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(input);
+        ProductOutput output = searchProductByUserUseCase.execute(input);
 
         // expect
         assertTrue(output.products().isEmpty());
@@ -63,7 +64,7 @@ class SearchProductByUserUseCaseTest {
         SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "product1");
 
         // when
-        SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(input);
+        ProductOutput output = searchProductByUserUseCase.execute(input);
 
         // expect
         assertEquals("product1", output.products().stream().findFirst().get().getProductId());
@@ -78,7 +79,7 @@ class SearchProductByUserUseCaseTest {
         SearchProductByUserUseCase.Input input = new SearchProductByUserUseCase.Input("userId", "product1");
 
         // when
-        SearchProductByUserUseCase.Output output = searchProductByUserUseCase.execute(input);
+        ProductOutput output = searchProductByUserUseCase.execute(input);
 
         // expect
         assertEquals(1, output.products().size());
