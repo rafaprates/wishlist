@@ -1,5 +1,5 @@
 # Wishlist
-Implementa um pequeno conjunto de funcinalidades de uma Lista de Desejos de um e-commence utilizando os princípos de Arquitetura Limpa.
+Implementa um pequeno conjunto de funcionalidades de uma Lista de Desejos de um e-commerce utilizando os princípios de Arquitetura Limpa.
 
 ## Testes
 A aplicação possui um total de 18 testes que têm como objetivo testar e descrever as funcionalidades do sistema.
@@ -13,8 +13,8 @@ Por meio desses testes, é possível ter uma visão geral do comportamento da ap
 |--------|----------|-----------|
 | POST   | `/wishlist/{userId}/products`| Adiciona um produto na Wishlist do cliente |
 | DELETE | `/wishlist/{userId}/products/{productId}`| Remove um produto da Wishlist do cliente |
-| GET | `/wishlist/{userId}/products` | Consulta todos os producots da Wishlist do cliente |
-| GET | `/wishlist/{userId}/products?productId={critério}` | Filtra a lista de producots do cliente em busca de um produto |
+| GET | `/wishlist/{userId}/products` | Consulta todos os produtos da Wishlist do cliente |
+| GET | `/wishlist/{userId}/products?productId={critério}` | Filtra a lista de produtos do cliente em busca de um produto |
 
 ## Pré-requisitos
 
